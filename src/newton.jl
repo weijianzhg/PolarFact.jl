@@ -1,0 +1,5 @@
+#
+# Newton's method
+#
+# Reference:
+#   
