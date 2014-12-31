@@ -2,6 +2,10 @@ module PolarFact
 
 include("common.jl") # common functions and types
 include("newton.jl") # using Newton's method
+include("svd.jl")
+# include("")
+
+export polarfact
 
 function polarfact{T}(A::Matrix{T}; 
                       alg::Symbol=:newton, 

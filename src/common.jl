@@ -8,3 +8,4 @@ immutable Result{T}
     niters::Int
     converged::Bool
 end
+
