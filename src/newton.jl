@@ -29,5 +29,18 @@ end
 
 function solve!(alg::NewtonAlg, 
                 X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
+    common_alg!(NewtonAlgup,  X, U, H, alg.maxiter, alg.verbose, alg.tol)
+end
+
+
+immutable NewtonAlgUp <: PolarUpdater end
+
+
+function update_UH!(upd::NewtonAlgUp, 
+                    X::Matrix{Float64},
+                    U::Matrix{Float64},
+                    H::Matrix{Float64})
+
 
 end
+

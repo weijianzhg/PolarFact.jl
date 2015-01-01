@@ -18,6 +18,8 @@ function polarfact{T}(A::Matrix{T};
     alg == :newton ? Newton(maxiter=maxiter, tol=tol, verbose=verbose) :
     error("Invalid algorithm.")
 
+    U = Array(Float64, size(A))
+    H = Array(Float64, size(A))
     # solve for polar factors
     solve!(algorithm, A, U, H)
 end
