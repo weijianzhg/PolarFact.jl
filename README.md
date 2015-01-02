@@ -5,15 +5,16 @@ A Julia package for polar decomposition.
 
 ## Types
 
-* Result::
+* Result
 
+```
 	immutable Result
 		U::Matrix{Float64}
 		H::Matrix{Float64}
 		niters::Int
 		converged::Bool
 	end
-
+```
 ## Examples
 
 ```julia
