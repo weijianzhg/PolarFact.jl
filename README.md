@@ -1,7 +1,8 @@
 # PolarFact
 
-A Julia package for polar decomposition.
+[![Build Status](https://travis-ci.org/weijianzhang/PolarFact.jl.svg?branch=master)](https://travis-ci.org/weijianzhang/PolarFact.jl)
 
+A Julia package for polar decomposition.
 
 ## Types
 
