@@ -54,12 +54,18 @@ function common_iter!(updater::PolarUpdater,
     while !converged && t < maxiter
         t += 1
         copy!(preU, U)
-        update_U!(updater,U)
-
+        update_U!(updater, U)
+        
         # determine convergence
-        mu = norm(preU - U, 1)
-        if mu < tol
+        diff = vecnorm(preU - U)
+        if diff < tol
             converged = true
+        end
+        
+        # determine scaling
+        reldiff = diff/vecnorm(U)
+        if updater.scale && (reldiff < updater.scale_tol)
+            updater.scale = false
         end
 
         # display infomation
