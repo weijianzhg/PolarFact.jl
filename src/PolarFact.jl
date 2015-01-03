@@ -11,11 +11,11 @@ include("newton.jl") # using Newton's method
 include("svd.jl")
 # include("")
 
-function polarfact{T}(A::Matrix{T}; 
-                      alg::Symbol=:newtonalg, 
-                      maxiter::Integer=:100,
-                      tol::Real=1.0e-6,
-                      verbose::Bool=false)
+function polarfact(A::Matrix{Float64}; 
+                   alg::Symbol=:newtonalg, 
+                   maxiter::Integer=:100,
+                   tol::Real=1.0e-6,
+                   verbose::Bool=false)
 
     # choose algorithm 
     algorithm = 
