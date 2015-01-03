@@ -48,7 +48,7 @@ function common_iter!(updater::PolarUpdater,
     converged = false
     t = 0
     if verbose
-        @printf("%-5s    %-13s    %-13s\n", "Iter", "Abs",  "Rel")
+        @printf("%-5s    %-13s    %-13s\n", "Iter.", "Rel. err.",  "Obj.")
     end
 
     while !converged && t < maxiter
@@ -63,7 +63,7 @@ function common_iter!(updater::PolarUpdater,
         end
         
         # determine scaling
-        reldiff = diff/vecnorm(U)
+        reldiff = diff/vecnorm(U) # relative error
         if updater.scale && (reldiff < updater.scale_tol)
             updater.scale = false
         end
