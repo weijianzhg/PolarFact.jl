@@ -1,8 +1,9 @@
 n = rand(1:10)
 
-A = rand(n,n)
+A = rand(n, n)
 
-r = polarfact(A, alg = :newtonalg);
+r = polarfact(A, alg = :halleyalg);
+
 
 # Test unitary matrix U
 
@@ -18,4 +19,4 @@ for i in eigvals(r.H)
     @test i >= 0.
 end
 
-println("Newton method passed test...")
+println("Halley method passed test...")

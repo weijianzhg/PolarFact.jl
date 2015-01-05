@@ -9,7 +9,7 @@ include("common.jl") # common functions and types
 include("newton.jl") # using Newton's method
 # include("newton_hybrid.jl")
 include("svd.jl")
-# include("")
+include("halley.jl")
 
 function polarfact(A::Matrix{Float64}; 
                    alg::Symbol=:newtonalg, 
@@ -20,6 +20,7 @@ function polarfact(A::Matrix{Float64};
     # choose algorithm 
     algorithm = 
        alg == :newtonalg ?  NewtonAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
+       alg == :halleyalg ?  HalleyAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
        alg == :svdalg ? SvdAlg(maxiter=maxiter, tol=tol, verbose=verbose) :                  
        error("Invalid algorithm.")
 

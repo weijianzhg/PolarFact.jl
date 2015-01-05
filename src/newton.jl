@@ -33,7 +33,7 @@ end
 
 function solve!(alg::NewtonAlg, 
                 X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
-    common_iter!(NewtonUpdater(alg.scale, alg.scale_tol), X, U, H, alg.maxiter, alg.verbose, alg.tol)
+    common_iter_scal!(NewtonUpdater(alg.scale, alg.scale_tol), X, U, H, alg.maxiter, alg.verbose, alg.tol)
 end
 
 type NewtonUpdater <: PolarUpdater 

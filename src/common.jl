@@ -34,7 +34,9 @@ end
 
 abstract PolarUpdater
 
+
 # common algorithm skeleton for iterative updating methods
+
 function common_iter!(updater::PolarUpdater,
                       X::Matrix{Float64}, 
                       U::Matrix{Float64}, 
@@ -42,6 +44,48 @@ function common_iter!(updater::PolarUpdater,
                       maxiter::Int,
                       verbose::Bool,
                       tol::Float64)
+    
+    preU = Array(Float64, size(X))
+    copy!(U, X)
+    converged = false
+    t = 0
+    if verbose
+        @printf("%-5s    %-13s    %-13s\n", "Iter.", "Rel. err.",  "Obj.")
+    end
+
+    while !converged && t < maxiter
+        t += 1
+        copy!(preU, U)
+        update_U!(updater, U)
+        
+        # determine convergence
+        diff = vecnorm(preU - U)
+        if diff < tol
+            converged = true
+        end
+        
+        # display infomation
+        if verbose
+            objv = evaluate_objv(preU, U)
+            @printf("%5d    %13.6e    %13.6e\n", 
+                    t, objv.absolute, objv.relative)
+        end
+    end
+
+    # compute H
+    H = U'*X
+    H = 0.5 * (H + H')
+    return Result(U, H, t, converged)
+end
+
+# Scaling iterative algorithm
+function common_iter_scal!(updater::PolarUpdater,
+                            X::Matrix{Float64}, 
+                            U::Matrix{Float64}, 
+                            H::Matrix{Float64},
+                            maxiter::Int,
+                            verbose::Bool,
+                            tol::Float64)
     
     preU = Array(Float64, size(X))
     copy!(U, X)
@@ -82,8 +126,10 @@ function common_iter!(updater::PolarUpdater,
     return Result(U, H, t, converged)
 end
 
-# common hybrid iteration skeleton 
-function common_hybrid!(updater1::PolarUpdater,
+
+
+# Hybrid iteration algorithm 
+function common_iter_hybr!(updater1::PolarUpdater,
                         updater2::PolarUpdater,
                         X::Matrix{Float64}, 
                         U::Matrix{Float64}, 
