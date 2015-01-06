@@ -12,16 +12,16 @@ include("svd.jl")
 include("halley.jl")
 
 function polarfact(A::Matrix{Float64}; 
-                   alg::Symbol=:newtonalg, 
+                   alg::Symbol=:newton, 
                    maxiter::Integer=:100,
                    tol::Real=1.0e-6,
                    verbose::Bool=false)
 
     # choose algorithm 
     algorithm = 
-       alg == :newtonalg ?  NewtonAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
-       alg == :halleyalg ?  HalleyAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
-       alg == :svdalg ? SvdAlg(maxiter=maxiter, tol=tol, verbose=verbose) :                  
+       alg == :newton ?  NewtonAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
+       alg == :halley ?  HalleyAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
+       alg == :svd ? SvdAlg(maxiter=maxiter, tol=tol, verbose=verbose) :                  
        error("Invalid algorithm.")
 
     # Initialization: if m > n, do QR factorization 

@@ -5,10 +5,11 @@
 immutable Result
     U::Matrix{Float64}
     H::Matrix{Float64}
-    niters::Int
-    converged::Bool
+    niters::Union(Int, Nothing)
+    converged::Union(Bool, Nothing)
 end
 
+# niters and converged are Nothing() for SVD method
 
 # the objective type
 
