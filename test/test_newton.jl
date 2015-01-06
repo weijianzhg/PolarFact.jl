@@ -2,7 +2,7 @@ n = rand(1:10)
 
 A = rand(n,n)
 
-r = polarfact(A, alg = :newtonalg);
+r = polarfact(A, alg = :newton);
 
 # Test unitary matrix U
 

@@ -2,7 +2,7 @@ n = rand(1:10)
 
 A = rand(n, n)
 
-r = polarfact(A, alg = :halleyalg);
+r = polarfact(A, alg = :halley);
 
 
 # Test unitary matrix U
