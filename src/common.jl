@@ -10,7 +10,7 @@ immutable Result
     
     function Result(U::Matrix{Float64}, H::Matrix{Float64}, 
                     niter::Union(Int,Nothing)=nothing, 
-                    converged::Union(Int, Nothing)=nothing)
+                    converged::Union(Bool, Nothing)=nothing)
         size(U, 2) == size(H, 1) || 
                throw(DimensionMismatch("Inner dimension of U and H mismatch."))
         new(U, H, niter, converged)
