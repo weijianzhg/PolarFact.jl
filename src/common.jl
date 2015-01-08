@@ -7,9 +7,17 @@ immutable Result
     H::Matrix{Float64}
     niters::Union(Int, Nothing)
     converged::Union(Bool, Nothing)
+    
+    function Result(U::Matrix{Float64}, H::Matrix{Float64}, 
+                    niter::Union(Int,Nothing)=nothing, 
+                    converged::Union(Int, Nothing)=nothing)
+        size(U, 2) == size(H, 1) || 
+               throw(DimensionMismatch("Inner dimension of U and H mismatch."))
+        new(U, H, niter, converged)
+    end
 end
 
-# niters and converged are Nothing() for SVD method
+# niters and converged are nothing for SVD method
 
 # the objective type
 
