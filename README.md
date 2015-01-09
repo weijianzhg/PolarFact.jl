@@ -37,12 +37,15 @@ polar decomposition:
 
 * the SVD method
 
-* (todo) a hybrid method
+* (todo) A hybrid Newton method
 
 	Start with Newton's method and switch to Newton-Schulz method whenever
 	convergence is guaranteed.
 
-* (todo) 
+* (todo) Gander's method
+
+* (todo) Dynamically weighted Halley (DWH) method  
+
 
 ## Interface
 
