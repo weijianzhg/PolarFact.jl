@@ -5,11 +5,10 @@ import Base: transpose!
 export polarfact
 
 
-include("common.jl") # common functions and types
-include("newton.jl") # using Newton's method
-# include("newton_hybrid.jl")
-include("svd.jl")
-include("halley.jl")
+include("common.jl")     # common functions and types
+include("newton.jl")     # using Newton's method
+include("svd.jl")        # using the SVD method
+include("halley.jl")     # using Halley's method
 
 function polarfact(A::Matrix{Float64}; 
                    alg::Symbol=:newton, 

@@ -4,6 +4,20 @@
 
 A Julia package for polar decomposition.
 
+## Overview
+
+Every square matrix ``A`` can be decomposed into ``A = UH``, where
+``U`` is an unitary matrix and ``H`` is an unique Hermitian positive
+semidefinite matrix. If ``A`` is invertible, ``H`` is positive
+definite and ``U`` is unique. A general ``m-by-n`` matrix ``A`` also
+has a polar decomposition though ``U`` and ``H`` may not be unique.
+
+The polar decomposition is closely related to the singular value
+decomposition (SVD). In particular, if ``A = P * S * Q'`` is a
+singular value decomposition of A, then ``U = P*Q'`` and ``H = Q*S*Q'``
+are the corresponding polar factors. 
+
+
 ## Types
 
 * Result
