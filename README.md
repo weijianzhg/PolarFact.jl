@@ -115,7 +115,7 @@ julia> r.niters
 
 julia> using MatrixDepot
 
-julia> B = matrixdepot("hilb", 6) # try a ill-conditioned test matrix
+julia> B = matrixdepot("hilb", 6) # try Hilbert matrix
 6x6 Array{Float64,2}:
  1.0       0.5       0.333333  0.25      0.2       0.166667 
  0.5       0.333333  0.25      0.2       0.166667  0.142857 
