@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/weijianzhang/PolarFact.jl.svg?branch=master)](https://travis-ci.org/weijianzhang/PolarFact.jl)
 
-A Julia package for polar decomposition.
+A Julia package for the polar decomposition.
 
 ## Overview 
 
@@ -24,33 +24,64 @@ polar decomposition:
 
 * (Scaled) Newton's method
 
- Reference:
- Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
- SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
-
+	Reference:
+	Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
+	SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
+	
 * Halley's method
 
- Reference:
- Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
- for computing the matrix polar decomposition, SIAM, J. Mat. Anal. 
- Vol. 31, Num 5 (2010) pp. 2700-2720 
+	Reference:
+	Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
+	for computing the matrix polar decomposition, SIAM, J. Mat. Anal. 
+	Vol. 31, Num 5 (2010) pp. 2700-2720. 
 
 * the SVD method
 
-	
-	
-## Types
+* (todo) a hybrid method
 
-* Result
+	Start with Newton's method and switch to Newton-Schulz method whenever
+	convergence is guaranteed.
+
+* (todo) 
+
+## Interface
+
+The package provides a high-level function ``polarfact``:
+
+```julia
+	polarfact(A; alg, maxiter, tol, verbose)
+```
+
+The meaning of the arguments:
+
+- ``A`` : the input matrix of type ``Matrix{Float64}``.
+
+- ``alg``: a symbol that indicates the factorization algorithm (default = ``:newton``).
+
+	This argument accepts the following values:
+
+	- ``:newton``: scaled Newton's method
+	- ``:halley``: Hallye's method
+	- ``:svd``: the SVD method
+
+- ``maxiter``: maximum number of iterations (default = ``100``).
+
+- ``tol`` :  tolerance (default = ``1.0e-6``).
+
+- ``verbose`` : whether to show procedural information (default = ``false``).
+	
+
+The output has type ``PolarFact.Result``, which is defined as 
 
 ```
 	immutable Result
-		U::Matrix{Float64}
-		H::Matrix{Float64}
-		niters::Int
-		converged::Bool
+		U::Matrix{Float64}      # unitary factor
+		H::Matrix{Float64}      # Hermitian positive semidefinite factor
+		niters::Int             # number of iterations
+		converged::Bool         # whether the algorithm converges
 	end
 ```
+
 ## Examples
 
 ```julia
