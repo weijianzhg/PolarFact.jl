@@ -22,20 +22,20 @@ factor ``U`` is the solution of the
 This package provide the following algorithms for computing matrix
 polar decomposition:
 
-	* (Scaled) Newton's method
+* (Scaled) Newton's method
 
-	Reference:
-	Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
-	SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
+ Reference:
+ Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
+ SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
 
-	* Halley's method
+* Halley's method
 
-	Reference:
-	Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
-	for computing the matrix polar decomposition, SIAM, J. Mat. Anal. 
-	Vol. 31, Num 5 (2010) pp. 2700-2720 
+ Reference:
+ Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
+ for computing the matrix polar decomposition, SIAM, J. Mat. Anal. 
+ Vol. 31, Num 5 (2010) pp. 2700-2720 
 
-	* the SVD method
+* the SVD method
 
 	
 	
