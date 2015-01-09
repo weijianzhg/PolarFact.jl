@@ -4,7 +4,7 @@
 
 A Julia package for polar decomposition.
 
-## Overview
+## Overview 
 
 Every square matrix ``A`` can be decomposed into ``A = UH``, where
 ``U`` is an unitary matrix and ``H`` is an unique Hermitian positive
@@ -14,10 +14,31 @@ has a polar decomposition though ``U`` and ``H`` may not be unique.
 
 The polar decomposition is closely related to the singular value
 decomposition (SVD). In particular, if ``A = P * S * Q'`` is a
-singular value decomposition of A, then ``U = P*Q'`` and ``H = Q*S*Q'``
-are the corresponding polar factors. 
+singular value decomposition of A, then ``U = P*Q'`` and ``H =
+Q*S*Q'`` are the corresponding polar factors. The orthogonal polar
+factor ``U`` is the solution of the
+[orthogonal Procrustes problem](http://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem).
 
+This package provide the following algorithms for computing matrix
+polar decomposition:
 
+	* (Scaled) Newton's method
+
+	Reference:
+	Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
+	SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
+
+	* Halley's method
+
+	Reference:
+	Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
+	for computing the matrix polar decomposition, SIAM, J. Mat. Anal. 
+	Vol. 31, Num 5 (2010) pp. 2700-2720 
+
+	* the SVD method
+
+	
+	
 ## Types
 
 * Result
