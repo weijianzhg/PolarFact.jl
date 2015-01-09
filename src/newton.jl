@@ -45,7 +45,7 @@ function update_U!(upd::NewtonUpdater, U::Matrix{Float64})
     scale = upd.scale
     Uinv = Array(Float64, size(U))
     Uinvt = Array(Float64, size(U))
-    Uinv = inv(U)
+    copy!(Uinv, inv(U))
     
     # 1, Inf-norm scaling 
     if scale
