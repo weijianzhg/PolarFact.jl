@@ -82,7 +82,7 @@ function common_iter!(updater::PolarUpdater,
     end
 
     # compute H
-    H[:] = U'*X
+    A_mul_B!(H, U', X)
     H = 0.5 * (H + H')
     return Result(U, H, t, converged)
 end
@@ -130,7 +130,7 @@ function common_iter_scal!(updater::PolarUpdater,
     end
 
     # compute H
-    H[:] = U'*X
+    A_mul_B!(H, U', X)
     H = 0.5 * (H + H')
     return Result(U, H, t, converged)
 end
