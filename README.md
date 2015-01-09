@@ -161,6 +161,8 @@ Iter.    Rel. err.        Obj.
 julia> r.niters
 7
 ```
+## Acknowledgements
 
+The design of the package is inspired by [NMF.jl](https://github.com/JuliaStats/NMF.jl).
 
 
