@@ -26,7 +26,10 @@ function polarfact(A::Matrix{Float64};
     # Initialization: if m > n, do QR factorization 
     m, n = size(A)
     if m > n
-        qrfact!(A)
+        A = qrfact(A)[:R]
+    elseif m < n
+        error("The row dimension of the input matrix must be 
+              greater or equal to column dimension.")
     end
 
     U = Array(Float64, size(A))
