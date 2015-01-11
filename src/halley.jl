@@ -32,8 +32,7 @@ end
 immutable HalleyUpdater <: PolarUpdater end
 
 
-function update_U!(upd::HalleyUpdater, U::Matrix{Float64})
-    # naive implementation    
+function update_U!(upd::HalleyUpdater, U::Matrix{Float64})   
     UtU = Array(Float64, size(U))
     At_mul_B!(UtU, U, U)
     copy!(U, U * (3*I + UtU)* inv(I + 3*UtU))
