@@ -20,7 +20,7 @@ function polarfact(A::Matrix{Float64};
     algorithm = 
        alg == :newton ?  NewtonAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
        alg == :halley ?  HalleyAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
-       alg == :svd ? SVDAlg(verbose=verbose) :   
+       alg == :svd ? SVDAlg() :   
        alg == :hybrid ? HybridAlg(NewtonAlg(), HalleyAlg()) :
        error("Invalid algorithm.")
 
