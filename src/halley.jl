@@ -36,6 +36,5 @@ function update_U!(upd::HalleyUpdater, U::Matrix{Float64})
     # naive implementation    
     UtU = Array(Float64, size(U))
     At_mul_B!(UtU, U, U)
-    U[:] = U * (3*I + UtU)* inv(I + 3*UtU)
-
+    copy!(U, U * (3*I + UtU)* inv(I + 3*UtU))
 end
