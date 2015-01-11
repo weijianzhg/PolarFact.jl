@@ -2,21 +2,23 @@
 # Compute Polar Decomposition via SVD
 #
 
-type SVDAlg
-    verbose::Bool
-
-    function SVDAlg(;verbose::Bool=false)
-        new(verbose)
-    end
-end
+type SVDAlg end
 
 function solve!(alg::SVDAlg, 
                 X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
-    # naive implementation
+
     P, S, Q = svd(X, thin = true)
-    U[:] = P * Q'
-    H[:] = Q * diagm(S) * Q' 
-    H = (H + H') / 2
+    PQt = Array(Float64, size(U))
+    Ht = Array(Float64, size(U))
+
+    A_mul_Bt!(PQt, P, Q)
+    copy!(U, PQt)
+    copy!(H, Q * diagm(S) * Q')
+    
+    copy!(Ht, H')
+    for i in length(H)
+        H[i] = ( H[i] + Ht[i] )/2
+    end
     return Result(U, H)
     
 end

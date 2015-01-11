@@ -6,7 +6,7 @@
 # SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
 #
    
-type NewtonAlg
+type NewtonAlg <: PolarAlg
     maxiter::Int        # maximum number of iterations.
     scale::Bool         # whether to scale Newton iteration.
     verbose::Bool       # whether to show procedural information

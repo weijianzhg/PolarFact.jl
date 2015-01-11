@@ -43,6 +43,7 @@ end
 
 abstract PolarUpdater
 
+abstract PolarAlg
 
 # common algorithm skeleton for iterative updating methods
 
