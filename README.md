@@ -4,6 +4,14 @@
 
 A Julia package for the polar decomposition.
 
+## Install
+
+To install the release version, type
+
+```julia
+julia> Pkg.add("PolarFact")
+```
+
 ## Overview 
 
 Every square matrix ``A`` can be decomposed into ``A = U*H``, where
