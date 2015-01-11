@@ -165,11 +165,12 @@ function common_iter_hybr!(updater1::PolarUpdater,
         if switched
             update_U!(updater2, U)        
         else
-            obj = norm(I - U'*U)
+            obj = norm(I - U'*U, 1)
             if obj > theta # theta is the switch parameter
                 update_U!(updater1, U)
             else
                 switched = true
+                update_U!(updater2, U)
             end
         end
 
