@@ -61,3 +61,6 @@ function update_U!(upd::NewtonUpdater, U::Matrix{Float64})
 end
 
 
+type NewtonHybAlg      # Newton Hybrid algorithm
+    maxiter::Int       # maximum number of iterations.
+end
