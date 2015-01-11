@@ -147,7 +147,7 @@ function common_iter_hybr!(updater1::PolarUpdater,
                            maxiter::Int,
                            verbose::Bool,
                            tol::Float64,
-                           theta::Float64)
+                           theta::Float64) # theta is the switch parameter
 
     preU = Array(Float64, size(X))
     copy!(U, X)

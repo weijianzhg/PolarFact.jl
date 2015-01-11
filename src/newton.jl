@@ -87,12 +87,12 @@ function solve!(alg::NewtonSchulzAlg,
     # Newton Schulz converge quadratically if norm(X) < sqrt(3)
     norm(X) < sqrt(3) || throw(ArgumentError("The norm of the input matrix must be smaller than sqrt(3)."))
 
-    common_iter!(NewtonSculzUpdater(), X, U, H, alg.maxiter, alg.verbose, alg.tol)
+    common_iter!(NewtonSchulzUpdater(), X, U, H, alg.maxiter, alg.verbose, alg.tol)
 end
 
-immutable NewtonSculzUpdater <: PolarUpdater end
+immutable NewtonSchulzUpdater <: PolarUpdater end
 
-function update_U!(upd::NewtonSculzUpdater, U::Matrix{Float64})
+function update_U!(upd::NewtonSchulzUpdater, U::Matrix{Float64})
     UtU = Array(Float64, size(U))
     At_mul_B!(UtU, U, U)
     copy!(U, 0.5*U*(3*I - UtU))
