@@ -61,6 +61,39 @@ function update_U!(upd::NewtonUpdater, U::Matrix{Float64})
 end
 
 
-type NewtonHybAlg      # Newton Hybrid algorithm
-    maxiter::Int       # maximum number of iterations.
+
+# Newton Schulz algrithm
+
+type NewtonSchulzAlg <: PolarAlg  
+    maxiter::Int     # maximum number of iterations.
+    verbose::Bool    # whether to show procedural information
+    tol::Float64     # convergence tolerance. 
+
+    function NewtonSchulzAlg(;maxiter::Integer=100,
+                             verbose::Bool=false,
+                             tol::Real=1.0e-6)
+        maxiter > 1 || error("maxiter must be greater than 1.")
+        tol > 0 || error("tol must be positive.")
+
+        new(int(maxiter),
+            verbose,
+            float64(tol))
+    end
+end
+
+function solve!(alg::NewtonSchulzAlg, 
+                X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
+    
+    # Newton Schulz converge quadratically if norm(X) < sqrt(3)
+    norm(X) < sqrt(3) || throw(ArgumentError("The norm of the input matrix must be smaller than sqrt(3)."))
+
+    common_iter!(NewtonSculzUpdater(), X, U, H, alg.maxiter, alg.verbose, alg.tol)
+end
+
+immutable NewtonSculzUpdater <: PolarUpdater end
+
+function update_U!(upd::NewtonSculzUpdater, U::Matrix{Float64})
+    UtU = Array(Float64, size(U))
+    At_mul_B!(UtU, U, U)
+    copy!(U, 0.5*U*(3*I - UtU))
 end
