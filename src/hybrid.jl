@@ -30,7 +30,7 @@ end
     
 function solve!(alg::NewtonHybridAlg, 
                 X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
-    common_iter_hybr!(NewtonUpdater(true, 1.0e-2), NewtonSculzUpdater(), X, U, H, 
+    common_iter_hybr!(NewtonUpdater(true, 1.0e-2), NewtonSchulzUpdater(), X, U, H, 
                       alg.maxiter, alg.verbose, alg.tol, alg.theta)
 end
 
