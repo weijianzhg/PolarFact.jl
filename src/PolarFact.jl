@@ -18,10 +18,11 @@ function polarfact(A::Matrix{Float64};
 
     # choose algorithm 
     algorithm = 
-       alg == :newton ?  NewtonAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
-       alg == :halley ?  HalleyAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
+       alg == :newton ? NewtonAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
+       alg == :halley ? HalleyAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
        alg == :svd ? SVDAlg() :   
-       alg == :hybrid ? HybridAlg(NewtonAlg(), HalleyAlg()) :
+       alg == :schulz ? NewtonSchulzAlg(maxiter=maxiter, tol=tol, verbose=verbose):
+       alg == :hybrid ? NewtonHybridAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
        error("Invalid algorithm.")
 
     # Initialization: if m > n, do QR factorization 

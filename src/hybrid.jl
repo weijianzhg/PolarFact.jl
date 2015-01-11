@@ -7,7 +7,7 @@
 # (1990) pp. 648-655.
 #
 
-type NewtonHybrid <: PolarAlg
+type NewtonHybridAlg <: PolarAlg
     maxiter::Int    # maximum number of iterations.
     verbose::Bool   # whether to show procedural information. 
     tol::Float64    # convergence tolerance
@@ -17,3 +17,9 @@ type NewtonHybrid <: PolarAlg
 
 end 
     
+function solve!(alg::NewtonHybridAlg, 
+                X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
+    common_iter_hybr!(NewtonUpdater(), NewtonSculzUpdater(), X, U, H, 
+                      alg.maxiter, alg.verbose, alg.tol, alg.theta)
+end
+
