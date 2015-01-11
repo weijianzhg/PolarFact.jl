@@ -9,7 +9,7 @@ r = polarfact(A, alg = :svd);
 
 U = r.U
 
-@test_approx_eq_eps U'*U eye(n) 1e-3
+@test_approx_eq_eps U'*U eye(n) 1e-7
 
 # Test Hermitian positive semifefinite matrix H
 
