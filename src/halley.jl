@@ -7,7 +7,7 @@
 # Vol. 31, Num 5 (2010) pp. 2700-2720 
 #
 
-type HalleyAlg
+type HalleyAlg <: PolarAlg
     maxiter::Int
     verbose::Bool
     tol::Float64
