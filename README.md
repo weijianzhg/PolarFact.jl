@@ -77,7 +77,7 @@ The meaning of the arguments:
 	- ``:halley``: Hallye's method
 	- ``:schulz``: the Newton Schulz method. Note this method can only
 		           apply to matrices with norm less than ``sqrt(3)``. It is
-				   better to use in conjunction with Newton's method, i.e., use ``:hybrid``.
+				   better to use in conjunction with Newton's method.
 	- ``:hybrid``: a hybrid Newton method 
 	- ``:svd``: the SVD method
 
