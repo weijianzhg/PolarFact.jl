@@ -37,10 +37,20 @@ polar decomposition:
 
 * the SVD method
 
-* (todo) A hybrid Newton method
+* the Newton Schulz method 
+
+	Reference:
+	Günther Schulz, Iterative Berechnung der reziproken Matrix, Z. Angew.
+	Math. Mech.,13:57-59, (1933) pp. 114, 181.
+
+* A hybrid Newton method
 
 	Start with Newton's method and switch to Newton-Schulz method whenever
 	convergence is guaranteed.
+
+	Reference: Nicholas J. Higham and Robert S. Schreiber, Fast Polar
+	Decomposition of an arbitrary matrix, SIAM, J. Sci. Statist. Comput.
+	Vol. 11, No. 4 (1990) pp. 648-655
 
 * (todo) Gander's method
 
@@ -65,6 +75,10 @@ The meaning of the arguments:
 
 	- ``:newton``: scaled Newton's method
 	- ``:halley``: Hallye's method
+	- ``:schulz``: the Newton Schulz method. Note this method can only
+		           apply to matrices with norm less than ``sqrt(3)``. It is
+				   better to use in conjunction with Newton's method, i.e., use ``:hybrid``.
+	- ``:hybrid``: a hybrid Newton method 
 	- ``:svd``: the SVD method
 
 - ``maxiter``: maximum number of iterations (default = ``100``).
