@@ -27,7 +27,7 @@ Q*S*Q'`` are the corresponding polar factors. The orthogonal polar
 factor ``U`` is the solution of the
 [orthogonal Procrustes problem](http://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem).
 
-This package provide the following algorithms for computing matrix
+This package provides the following algorithms for computing matrix
 polar decomposition:
 
 * (Scaled) Newton's method
@@ -51,7 +51,7 @@ polar decomposition:
 	Günther Schulz, Iterative Berechnung der reziproken Matrix, Z. Angew.
 	Math. Mech.,13:57-59, (1933) pp. 114, 181.
 
-* A hybrid Newton method
+* a hybrid Newton method
 
 	Start with Newton's method and switch to Newton-Schulz method whenever
 	convergence is guaranteed.
@@ -62,7 +62,7 @@ polar decomposition:
 
 * (todo) Gander's method
 
-* (todo) Dynamically weighted Halley (DWH) method  
+* (todo) the Dynamically weighted Halley (DWH) method  
 
 
 ## Interface
@@ -82,7 +82,7 @@ The meaning of the arguments:
 	This argument accepts the following values:
 
 	- ``:newton``: scaled Newton's method
-	- ``:halley``: Hallye's method
+	- ``:halley``: Halley's method
 	- ``:schulz``: the Newton Schulz method. Note this method can only
 		           apply to matrices with norm less than ``sqrt(3)``. It is
 				   better to use in conjunction with Newton's method.
