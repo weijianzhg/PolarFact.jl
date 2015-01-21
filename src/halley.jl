@@ -37,3 +37,43 @@ function update_U!(upd::HalleyUpdater, U::Matrix{Float64})
     At_mul_B!(UtU, U, U)
     copy!(U, U * (3*I + UtU)* inv(I + 3*UtU))
 end
+
+#
+# QR-based Dynamically Weighted Halley (QDWH) algorithm
+#
+
+type QDWHAlg <: PolarAlg
+    maxiter::Int
+    verbose::Bool
+    piv::Symbol  # type of pivoting
+    tol::Float64
+    
+    function QDWHAlg(;maxiter::Integer=100,
+                     verbose::Bool=false,
+                     piv::Symbol= :rc # column pivoting and row sorting
+                     tol::Real=1.0e-6)
+        maxiter > 1 || error("maxiter must be greater than 1.")
+        tol > 0 || error("tol must be positive.")
+        
+        new(int(maxiter),
+            verbose,
+            piv,
+            float64(tol))
+    end
+end
+
+
+function solve!(alg::QDWHAlg,
+                X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
+    common_iter!(QDWHUpdater(alg.piv), X, U, H, alg.maxiter, alg.verbose, alg.tol)
+end
+
+immutable QDWHUpdater <: PolarUpdater
+    piv::Symbol
+end
+
+
+function update_U!(upd::QDWHUpdater, U::Matrix{Float64})   
+
+end
+
