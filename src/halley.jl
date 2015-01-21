@@ -50,7 +50,7 @@ type QDWHAlg <: PolarAlg
     
     function QDWHAlg(;maxiter::Integer=100,
                      verbose::Bool=false,
-                     piv::Symbol= :rc # column pivoting and row sorting
+                     piv::Symbol= :rc, # column pivoting and row sorting
                      tol::Real=1.0e-6)
         maxiter > 1 || error("maxiter must be greater than 1.")
         tol > 0 || error("tol must be positive.")
@@ -68,12 +68,17 @@ function solve!(alg::QDWHAlg,
     common_iter!(QDWHUpdater(alg.piv), X, U, H, alg.maxiter, alg.verbose, alg.tol)
 end
 
-immutable QDWHUpdater <: PolarUpdater
+type QDWHUpdater <: PolarUpdater
     piv::Symbol
+    alpha::Float64
+    L::Float64
 end
 
 
 function update_U!(upd::QDWHUpdater, U::Matrix{Float64})   
+    piv = upd.piv
+    alpha = upd.alpha
+    L = upd.L
 
 end
 
