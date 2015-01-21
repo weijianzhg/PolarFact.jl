@@ -33,13 +33,13 @@ polar decomposition:
 * (Scaled) Newton's method
 
 	Reference:
-	Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
+	[1] Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
 	SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
 	
 * Halley's method
 
 	Reference:
-	Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
+	[2] Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
 	for computing the matrix polar decomposition, SIAM, J. Mat. Anal. 
 	Vol. 31, Num 5 (2010) pp. 2700-2720. 
 
@@ -48,22 +48,44 @@ polar decomposition:
 * the Newton Schulz method 
 
 	Reference:
-	Günther Schulz, Iterative Berechnung der reziproken Matrix, Z. Angew.
+	[3] Günther Schulz, Iterative Berechnung der reziproken Matrix, Z. Angew.
 	Math. Mech.,13:57-59, (1933) pp. 114, 181.
 
 * a hybrid Newton method
 
-	Start with Newton's method and switch to Newton-Schulz method whenever
-	convergence is guaranteed.
+	Start with (scaled) Newton's method and switch to Newton-Schulz method
+	whenever convergence is guaranteed.
 
-	Reference: Nicholas J. Higham and Robert S. Schreiber, Fast Polar
+	Reference:
+	[4] Nicholas J. Higham and Robert S. Schreiber, Fast Polar
 	Decomposition of an arbitrary matrix, SIAM, J. Sci. Statist. Comput.
 	Vol. 11, No. 4 (1990) pp. 648-655
 
-* (todo) Gander's method
+* (todo) the QR-based Dynamically weighted Halley (QDWH) method  
 
-* (todo) the Dynamically weighted Halley (DWH) method  
+### Comments on Usage
 
+The scaled Newton iteration is a well known and effective method for
+computing the polar decomposition. It converges quadratically and is
+backward stable [5]. The QDWH is a cubic-rate convergent method.
+It is backward stable under the assumption that column pivoting and
+either row pivoting or row sorting are used in the QR factorization [5]. 
+Without scaling, both type of methods can be slow when the matrix is
+ill-conditioned.
+
+On many modern computers, the matrix multiplication can be performed
+very efficiently. The Newton Schulz method requires two matrix
+multiplication while the (scaled) Newton method requires one matrix
+inversion. Thus the hybrid Newton is more efficient if matrix
+multiplication is 2 times faster than the matrix inversion [4].
+
+Comparing to the SVD approach, the iterative algorithms are much more
+efficient when the matrix is nearly unitary (arises in aerospace
+applications). 
+
+[5] Yuji Nakatsukasa and Nicholas J. Higham, Backward stability of
+iterations for computing the polar decomposition, SIAM, J.
+Matrix Anal. Appl. Vol. 33, No. 2, pp. 460-479. 
 
 ## Interface
 
