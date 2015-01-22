@@ -63,12 +63,6 @@ function common_iter!(updater::PolarUpdater,
         @printf("%-5s    %-13s    %-13s\n", "Iter.", "Rel. err.",  "Obj.")
     end
 
-    # For the QDWH method 
-    if typeof(updater) == QDWHUpdater
-        updater.alpha = 0   # an estimate for norm(A,2)
-        updater.L = 0       # a lower bound for the smallest singular value of X
-    end
-
     while !converged && t < maxiter
         t += 1
         copy!(preU, U)

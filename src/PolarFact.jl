@@ -20,6 +20,7 @@ function polarfact(A::Matrix{Float64};
     # choose algorithm 
     algorithm = 
        alg == :newton ? NewtonAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
+       alg == :qdwh ?  QDWHAlg(maxiter=maxiter, tol=tol, verbose=verbose) : 
        alg == :halley ? HalleyAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
        alg == :svd ? SVDAlg() :   
        alg == :schulz ? NewtonSchulzAlg(maxiter=maxiter, tol=tol, verbose=verbose):

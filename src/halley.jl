@@ -41,16 +41,20 @@ end
 #
 # QR-based Dynamically Weighted Halley (QDWH) algorithm
 #
-
+# Reference: Optimizing Halley's iteration for computing the matrix 
+#            polar decomposition, Yuji Nakatsukasa, Zhaojun Bai and 
+#            Francois Gygi, SIAM, J. Mat. Anal. Vol. 31, Num 5 (2010)
+#            pp. 2700-2720
+#
 type QDWHAlg <: PolarAlg
     maxiter::Int
     verbose::Bool
-    piv::Symbol  # type of pivoting
-    tol::Float64
+    piv::Bool       # whether to pivot  
+    tol::Float64  
     
     function QDWHAlg(;maxiter::Integer=100,
                      verbose::Bool=false,
-                     piv::Symbol= :rc, # column pivoting and row sorting
+                     piv::Bool=true, 
                      tol::Real=1.0e-6)
         maxiter > 1 || error("maxiter must be greater than 1.")
         tol > 0 || error("tol must be positive.")
@@ -65,20 +69,60 @@ end
 
 function solve!(alg::QDWHAlg,
                 X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
-    common_iter!(QDWHUpdater(alg.piv), X, U, H, alg.maxiter, alg.verbose, alg.tol)
+    # alpha is an estimate of the largest singular value of the
+    # original matrix
+    n = size(X, 1)
+    alpha = vecnorm(X)   
+    for i in length(X)
+        X[i] /= alpha # form X0
+    end
+
+    # beta is an estimate of the smallest singular value of the
+    # original matrix
+    smin_est = norm(X, 1)/cond(X, 1)
+    L  = smin_est/sqrt(n)
+
+    common_iter!(QDWHUpdater(alg.piv, L), X, U, H, alg.maxiter, alg.verbose, alg.tol)
 end
 
 type QDWHUpdater <: PolarUpdater
-    piv::Symbol
-    alpha::Float64
-    L::Float64
+    piv::Bool
+    L::Float64    
 end
 
 
 function update_U!(upd::QDWHUpdater, U::Matrix{Float64})   
     piv = upd.piv
-    alpha = upd.alpha
     L = upd.L
-
+    m, n = size(U)
+    B = Array(Float64, 2*n, n)
+    Q1 = Array(Float64, n, n)
+    Q2 = Array(Float64, n, n)
+    # Compute paramters L, a, b, c
+    L2 = L^2
+    dd = try
+        (4 * (1 - L2)/L2^2)^(1/3)
+        catch 
+        (complex(4 * (1 -L2)/L2^2, 0))^(1/3)
+    end
+    sqd = sqrt(1+dd)
+    a = sqd + 0.5 * sqrt(8 - 4 * dd + 8 * (2 - L2)/(L2 * sqd))
+    a = real(a)
+    b = (a - 1)^2 / 4
+    c = a + b - 1
+    
+    # update L
+    upd.L = L * (a + b * L2)/(1 + c * L2)
+    
+    copy!(B, [sqrt(c)*U; eye(n)])
+    if piv
+        F = qrfact(B, pivot = true)
+    else
+        F = qrfact(B)
+    end
+    copy!(Q1, full(F[:Q])[1:m, :])
+    copy!(Q2, full(F[:Q])[m+1:end, :])
+    copy!(U, b / c * U + (a - b / c) / sqrt(c) * Q1 * Q2')
+    
 end
 
