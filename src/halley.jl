@@ -46,6 +46,11 @@ end
 #            Francois Gygi, SIAM, J. Mat. Anal. Vol. 31, Num 5 (2010)
 #            pp. 2700-2720
 #
+# Limitations: 1. the QDWH method should support m > n matrix itself in the future.
+#              2. the computing of alpha and L in solve! can be improved by using
+#                 norm and condition number estimate, which are currently 
+#                 not available in Julia.
+#
 type QDWHAlg <: PolarAlg
     maxiter::Int
     verbose::Bool
@@ -77,8 +82,7 @@ function solve!(alg::QDWHAlg,
         X[i] /= alpha # form X0
     end
 
-    # beta is an estimate of the smallest singular value of the
-    # original matrix
+    # L is a lower bound for the smallest singular value of X0
     smin_est = norm(X, 1)/cond(X, 1)
     L  = smin_est/sqrt(n)
 
@@ -86,8 +90,8 @@ function solve!(alg::QDWHAlg,
 end
 
 type QDWHUpdater <: PolarUpdater
-    piv::Bool
-    L::Float64    
+    piv::Bool   # whether to pivot QR factorization
+    L::Float64  # a lower bound for the smallest singluar value of each update matrix U
 end
 
 
@@ -95,7 +99,7 @@ function update_U!(upd::QDWHUpdater, U::Matrix{Float64})
     piv = upd.piv
     L = upd.L
     m, n = size(U)
-    B = Array(Float64, 2*n, n)
+    B = Array(Float64, m+n, n)
     Q1 = Array(Float64, n, n)
     Q2 = Array(Float64, n, n)
     # Compute paramters L, a, b, c

@@ -8,7 +8,7 @@ export polarfact
 include("common.jl")     # common functions and types
 include("newton.jl")     # using Newton's method
 include("svd.jl")        # using the SVD method
-include("halley.jl")     # using Halley's method
+include("halley.jl")     # using Halley's method and the QDWH method
 include("hybrid.jl")     # using hybrid method
 
 function polarfact(A::Matrix{Float64}; 
