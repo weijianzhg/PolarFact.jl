@@ -75,7 +75,7 @@ polar decomposition:
 The scaled Newton iteration is a well known and effective method for
 computing the polar decomposition. It converges quadratically and is
 backward stable under the assumption that the matrix inverses are
-computed in a mixed backward forward stable way[6]. The QDWH is a
+computed in a mixed backward forward stable way [6]. The QDWH is a
 cubic-rate convergent method.  It is backward stable under the
 assumption that column pivoting and either row pivoting or row sorting
 are used in the QR factorization [6].  Without scaling, both type of
@@ -149,36 +149,51 @@ SVD method.
 ## Examples
 
 ```julia
-	julia> using PolarFact
+julia> using PolarFact
 
-	julia> A = rand(10,10);
+julia> A = rand(6,6);
 
-	julia> r = polarfact(A);
+julia> r = polarfact(A);
 
-	julia> r.U
-	10x10 Array{Float64,2}:
-	-0.489361   0.0601629   0.346164   …  -0.0213289   0.596928    0.279623 
-	0.302874  -0.129649    0.080602      -0.241901    0.0372137  -0.435765 
-	0.111824  -0.236326   -0.302027       0.019033   -0.0162169   0.456752 
-	-0.314102   0.452703    0.0132996      0.0460329  -0.481377    0.358254 
-	-0.168465  -0.123994   -0.0880474      0.449138    0.0860416  -0.0702016
-	0.153207  -0.053861    0.5924     …   0.660055   -0.080868   -0.128266 
-	0.391474   0.361302    0.25525       -0.015308   -0.294591    0.202959 
-	0.352644  -0.31368     0.424935      -0.294412    0.111984    0.489584 
-	0.452478   0.206963   -0.411828       0.419035    0.388085    0.249209 
-	0.153067   0.654781    0.0909015     -0.19659     0.382659   -0.174877 
+julia> r.U
+6x6 Array{Float64,2}:
+  0.78067    -0.0694445   0.470076    -0.292781   -0.0423338   0.277934 
+ -0.0984991   0.200495   -0.350106    -0.167351    0.394071    0.802638 
+  0.235931    0.376468    0.00966701   0.0259734   0.78062    -0.438716 
+  0.38059    -0.347928   -0.256805     0.79899     0.105905    0.136195 
+  0.21592     0.816347   -0.136636     0.261595   -0.445576    0.0362852
+ -0.365675    0.160542    0.756137     0.422827    0.154252    0.257271 
 
-	julia> r.niters
-	6
+julia> r.niters
+6
 
-	julia> r = polarfact(A, alg = :qdwh, verbose = true);
-	Iter.    Rel. err.        Obj.         
-	1     2.337305e-01     2.940272e+01
-    2     5.454641e-01     5.108731e+00
-    3     3.655509e-01     3.338175e-01
-    4     4.833229e-02     1.140381e-03
-    5     1.788780e-04     6.675496e-11
-    6     1.047445e-11     2.144118e-15
+julia> using MatrixDepot  # a test matrix collection
+
+julia> A = matrixdepot("randsvd", 20, 10^15);  # test a very ill conditioned random matrix 
+
+julia> r = polarfact(A, alg = :newton, verbose = true);
+Iter.    Rel. err.        Obj.         
+    1     1.548278e+07     4.804543e+14
+    2     9.999002e-01     5.902800e+06
+    3     9.925194e-01     7.247316e+02
+    4     9.317962e-01     9.261149e+00
+    5     7.226745e-01     3.409441e-01
+    6     1.392861e-01     2.550612e-03
+    7     1.272341e-03     2.760504e-07
+    8     1.378506e-07     1.062337e-14
+
+julia> r = polarfact(A, alg = :qdwh, verbose = true);
+Iter.    Rel. err.        Obj.         
+    1     1.018823e+00     2.294023e+00
+    2     9.492166e-01     2.113416e+00
+    3     6.766440e-01     7.363896e-01
+    4     1.337401e-01     8.038009e-04
+    5     1.208881e-04     4.126278e-13
+    6     6.184049e-14     2.242130e-15
+
+julia> r = polarfact(A, alg = :halley);
+julia> r.niters
+34
 ```
 
 ## Acknowledgements
