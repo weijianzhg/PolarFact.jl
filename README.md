@@ -124,7 +124,10 @@ The meaning of the arguments:
 
 - ``tol`` :  tolerance (default = ``1.0e-6``).
 
-- ``verbose`` : whether to show procedural information (default = ``false``).
+- ``verbose`` : whether to show procedural information (default = ``false``), where
+               ``Iter`` is the number of iterations, ``Rel. err.`` is equal to
+			   ``norm(preU - U, Inf) / norm(preU, Inf)`` and ``Obj.`` is equal to
+			   ``norm(I - U'*U, Inf)``. 
 
 *Note:* ``maxiter``, ``tol`` and ``verbose`` are not used for the
 SVD method.
