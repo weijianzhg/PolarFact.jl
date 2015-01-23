@@ -1,8 +1,10 @@
 # PolarFact
 
 [![Build Status](https://travis-ci.org/weijianzhang/PolarFact.jl.svg?branch=master)](https://travis-ci.org/weijianzhang/PolarFact.jl)
+| Julia 0.3 [![PolarFact](http://pkg.julialang.org/badges/PolarFact_release.svg)](http://pkg.julialang.org/?pkg=PolarFact&ver=release)
+| Julia 0.4 [![PolarFact](http://pkg.julialang.org/badges/PolarFact_nightly.svg)](http://pkg.julialang.org/?pkg=PolarFact&ver=nightly)
 
-A Julia package for the polar decomposition.
+A Julia package for the matrix polar decomposition.
 
 ## Install
 
