@@ -27,7 +27,10 @@ The polar decomposition is closely related to the singular value
 decomposition (SVD). In particular, if ``A = P*S*Q'`` is a singular
 value decomposition of A, then ``U = P*Q'`` and ``H = Q*S*Q'`` are the
 corresponding polar factors. The orthonormal polar factor ``U`` is the
-nearest orthonormal matrix to ``A`` in the Frobenius norm. 
+nearest orthonormal matrix to ``A`` in the Frobenius norm [1] (Sec. 8.1). 
+
+[1] Nicholas J. Higham, Functions of Matrices: Theory and Computation,
+SIAM, Philadelphia, PA, USA, 2008.
 
 This package provides the following algorithms for computing matrix
 polar decomposition:
@@ -35,10 +38,12 @@ polar decomposition:
 * (Scaled) Newton's method
 
 	Reference:
-	[1] Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
+	[2] Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
 	SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
 	
 * the Newton Schulz method 
+  
+    This method can only apply to matrix ``A`` such that ``norm(A) < sqrt(3)``.
 
 	Reference:
 	[3] Günther Schulz, Iterative Berechnung der reziproken Matrix, Z. Angew.
@@ -47,7 +52,7 @@ polar decomposition:
 * a hybrid Newton method
 
 	Start with (scaled) Newton's method and switch to Newton-Schulz method
-	whenever convergence is guaranteed.
+	when convergence is guaranteed.
 
 	Reference:
 	[4] Nicholas J. Higham and Robert S. Schreiber, Fast Polar
@@ -57,26 +62,25 @@ polar decomposition:
 * Halley's method
 
 	Reference:
-	[2] Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
+	[5] Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
 	for computing the matrix polar decomposition, SIAM, J. Mat. Anal. 
 	Vol. 31, Num 5 (2010) pp. 2700-2720. 
 
-* the QR-based Dynamically weighted Halley (QDWH) method [2]  
+* the QR-based Dynamically weighted Halley (QDWH) method [5]  
 
 * the SVD method
-
 
 ### Comments on Usage
 
 The scaled Newton iteration is a well known and effective method for
 computing the polar decomposition. It converges quadratically and is
-backward stable [5]. The QDWH is a cubic-rate convergent method.
+backward stable [6]. The QDWH is a cubic-rate convergent method.
 It is backward stable under the assumption that column pivoting and
-either row pivoting or row sorting are used in the QR factorization [5]. 
+either row pivoting or row sorting are used in the QR factorization [6]. 
 Without scaling, both type of methods can be slow when the matrix is
 ill-conditioned.
 
-On many modern computers, the matrix multiplication can be performed
+On many modern computers, matrix multiplication can be performed
 very efficiently. The Newton Schulz method requires two matrix
 multiplication while the (scaled) Newton method requires one matrix
 inversion. Thus the hybrid Newton is more efficient if matrix
@@ -86,9 +90,10 @@ Comparing to the SVD approach, the iterative algorithms are much more
 efficient when the matrix is nearly unitary (arises in aerospace
 applications). 
 
-[5] Yuji Nakatsukasa and Nicholas J. Higham, Backward stability of
+[6] Yuji Nakatsukasa and Nicholas J. Higham, Backward stability of
 iterations for computing the polar decomposition, SIAM, J.
 Matrix Anal. Appl. Vol. 33, No. 2, pp. 460-479. 
+
 
 ## Interface
 
@@ -109,9 +114,7 @@ The meaning of the arguments:
 	- ``:newton``: scaled Newton's method
 	- ``:qdwh``: the QR-based Dynamically weighted Halley (QDWH) method
 	- ``:halley``: Halley's method
-	- ``:schulz``: the Newton Schulz method. Note this method can only
-		           apply to matrices with norm less than ``sqrt(3)``. It is
-				   better to use in conjunction with Newton's method.
+	- ``:schulz``: the Newton Schulz method
 	- ``:hybrid``: a hybrid Newton method 
 	- ``:svd``: the SVD method
 
@@ -121,7 +124,7 @@ The meaning of the arguments:
 
 - ``verbose`` : whether to show procedural information (default = ``false``).
 
-*Note:* ``maxiter``, ``tol`` and ``verbose`` are not defined for the
+*Note:* ``maxiter``, ``tol`` and ``verbose`` are not used for the
 SVD method.
 
 The output has type ``PolarFact.Result``, which is defined as 
