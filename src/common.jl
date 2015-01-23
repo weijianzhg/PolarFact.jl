@@ -17,7 +17,7 @@ immutable Result
     end
 end
 
-# niters and converged are nothing for SVD method
+# niters and converged are nothing for the SVD method
 
 # the objective type
 

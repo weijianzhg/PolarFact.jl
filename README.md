@@ -16,18 +16,18 @@ julia> Pkg.add("PolarFact")
 
 ## Overview 
 
-Every square matrix ``A`` can be decomposed into ``A = U*H``, where
-``U`` is an unitary matrix and ``H`` is an unique Hermitian positive
-semidefinite matrix. If ``A`` is invertible, ``H`` is positive
-definite and ``U`` is unique. A general ``m-by-n`` matrix ``A`` also
-has a polar decomposition though ``U`` and ``H`` may not be unique.
+Every ``m-by-n`` matrix ``A`` has a polar decomposition ``A=UH``,
+where the ``m-by-n`` matrix ``U`` has orthonormal columns if ``m>n``
+or orthonormal rows if ``m<n`` and the ``n-by-n`` matrix ``H`` is
+Hermitian positive semidefinite. For a square matrix ``A``, ``H`` is
+unique. If in addition, ``A`` is nonsingular, then ``H`` is positive
+definite and ``U`` is unique.
 
 The polar decomposition is closely related to the singular value
-decomposition (SVD). In particular, if ``A = P*S*Q'`` is a
-singular value decomposition of A, then ``U = P*Q'`` and ``H =
-Q*S*Q'`` are the corresponding polar factors. The orthogonal polar
-factor ``U`` is the solution of the
-[orthogonal Procrustes problem](http://en.wikipedia.org/wiki/Orthogonal_Procrustes_problem).
+decomposition (SVD). In particular, if ``A = P*S*Q'`` is a singular
+value decomposition of A, then ``U = P*Q'`` and ``H = Q*S*Q'`` are the
+corresponding polar factors. The orthonormal polar factor ``U`` is the
+nearest orthonormal matrix to ``A`` in the Frobenius norm. 
 
 This package provides the following algorithms for computing matrix
 polar decomposition:
@@ -38,15 +38,6 @@ polar decomposition:
 	[1] Nicholas J. Higham, Computing the Polar Decomposition ---with Applications,
 	SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
 	
-* Halley's method
-
-	Reference:
-	[2] Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
-	for computing the matrix polar decomposition, SIAM, J. Mat. Anal. 
-	Vol. 31, Num 5 (2010) pp. 2700-2720. 
-
-* the SVD method
-
 * the Newton Schulz method 
 
 	Reference:
@@ -63,7 +54,17 @@ polar decomposition:
 	Decomposition of an arbitrary matrix, SIAM, J. Sci. Statist. Comput.
 	Vol. 11, No. 4 (1990) pp. 648-655
 
-* (todo) the QR-based Dynamically weighted Halley (QDWH) method  
+* Halley's method
+
+	Reference:
+	[2] Y. Nakatsukasa, Z. Bai and F. Gygi, Optimizing Halley's iteration 
+	for computing the matrix polar decomposition, SIAM, J. Mat. Anal. 
+	Vol. 31, Num 5 (2010) pp. 2700-2720. 
+
+* the QR-based Dynamically weighted Halley (QDWH) method [2]  
+
+* the SVD method
+
 
 ### Comments on Usage
 
@@ -106,6 +107,7 @@ The meaning of the arguments:
 	This argument accepts the following values:
 
 	- ``:newton``: scaled Newton's method
+	- ``:qdwh``: the QR-based Dynamically weighted Halley (QDWH) method
 	- ``:halley``: Halley's method
 	- ``:schulz``: the Newton Schulz method. Note this method can only
 		           apply to matrices with norm less than ``sqrt(3)``. It is
@@ -118,18 +120,23 @@ The meaning of the arguments:
 - ``tol`` :  tolerance (default = ``1.0e-6``).
 
 - ``verbose`` : whether to show procedural information (default = ``false``).
-	
+
+*Note:* ``maxiter``, ``tol`` and ``verbose`` are not defined for the
+SVD method.
 
 The output has type ``PolarFact.Result``, which is defined as 
 
 ```
 	immutable Result
-		U::Matrix{Float64}      # unitary factor
-		H::Matrix{Float64}      # Hermitian positive semidefinite factor
-		niters::Int             # number of iterations
-		converged::Bool         # whether the algorithm converges
+		U::Matrix{Float64}               # unitary factor
+		H::Matrix{Float64}               # Hermitian positive semidefinite factor
+		niters::Union(Int, Nothing)      # number of iterations or Nothing
+		converged::Union(Bool, Nothing)  # whether the algorithm converges or Nothing
 	end
 ```
+
+*Note:* ``niters`` and ``converged`` are of type ``Nothing`` for the
+SVD method. 
 
 ## Examples
 
