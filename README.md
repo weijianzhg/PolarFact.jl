@@ -27,7 +27,7 @@ The polar decomposition is closely related to the singular value
 decomposition (SVD). In particular, if ``A = P*S*Q'`` is a singular
 value decomposition of A, then ``U = P*Q'`` and ``H = Q*S*Q'`` are the
 corresponding polar factors. The orthonormal polar factor ``U`` is the
-nearest orthonormal matrix to ``A`` in the Frobenius norm [1] (Sec. 8.1). 
+nearest orthonormal matrix to ``A`` in the Frobenius norm [1, Sec. 8.1]. 
 
 [1] Nicholas J. Higham, Functions of Matrices: Theory and Computation,
 SIAM, Philadelphia, PA, USA, 2008.
@@ -74,11 +74,12 @@ polar decomposition:
 
 The scaled Newton iteration is a well known and effective method for
 computing the polar decomposition. It converges quadratically and is
-backward stable [6]. The QDWH is a cubic-rate convergent method.
-It is backward stable under the assumption that column pivoting and
-either row pivoting or row sorting are used in the QR factorization [6]. 
-Without scaling, both type of methods can be slow when the matrix is
-ill-conditioned.
+backward stable under the assumption that the matrix inverses are
+computed in a mixed backward forward stable way[6]. The QDWH is a
+cubic-rate convergent method.  It is backward stable under the
+assumption that column pivoting and either row pivoting or row sorting
+are used in the QR factorization [6].  Without scaling, both type of
+methods can be slow when the matrix is ill-conditioned.
 
 On many modern computers, matrix multiplication can be performed
 very efficiently. The Newton Schulz method requires two matrix
@@ -87,8 +88,9 @@ inversion. Thus the hybrid Newton is more efficient if matrix
 multiplication is 2 times faster than the matrix inversion [4].
 
 Comparing to the SVD approach, the iterative algorithms are much more
-efficient when the matrix is nearly unitary (arises in aerospace
-applications). 
+efficient when the matrix is nearly unitary (as in applications, for
+example, where a time-dependent matrix drifts from orthogonality due
+to rounding errors or other errors).
 
 [6] Yuji Nakatsukasa and Nicholas J. Higham, Backward stability of
 iterations for computing the polar decomposition, SIAM, J.
@@ -144,79 +146,38 @@ SVD method.
 ## Examples
 
 ```julia
-julia> using PolarFact
+	julia> using PolarFact
 
-julia> A = rand(6,6);
+	julia> A = rand(10,10);
 
-julia> r = polarfact(A, verbose=true);
-Iter.    Rel. err.        Obj.         
-    1     8.031554e-01     9.218344e+00
-    2     4.931430e-01     4.609596e-01
-    3     1.073877e-01     8.672101e-03
-    4     2.239146e-03     8.894508e-06
-    5     2.256007e-06     1.782681e-11
-    6     4.474254e-12     6.522560e-16
+	julia> r = polarfact(A);
 
-julia> r.U
-6x6 Array{Float64,2}:
-  0.51827    0.315836    0.563476      0.396524   -0.266376   -0.293174 
-  0.674541  -0.164589   -0.000399023  -0.266933   -0.0162729   0.668122 
- -0.401425  -0.32354     0.654859      0.287182    0.158807    0.444575 
-  0.206237  -0.0348974  -0.392979      0.72679     0.515961    0.0858893
-  0.103665   0.291805    0.303866     -0.393481    0.792383   -0.170502 
- -0.248935   0.825901   -0.082991      0.0774023  -0.0973267   0.483289 
+	julia> r.U
+	10x10 Array{Float64,2}:
+	-0.489361   0.0601629   0.346164   …  -0.0213289   0.596928    0.279623 
+	0.302874  -0.129649    0.080602      -0.241901    0.0372137  -0.435765 
+	0.111824  -0.236326   -0.302027       0.019033   -0.0162169   0.456752 
+	-0.314102   0.452703    0.0132996      0.0460329  -0.481377    0.358254 
+	-0.168465  -0.123994   -0.0880474      0.449138    0.0860416  -0.0702016
+	0.153207  -0.053861    0.5924     …   0.660055   -0.080868   -0.128266 
+	0.391474   0.361302    0.25525       -0.015308   -0.294591    0.202959 
+	0.352644  -0.31368     0.424935      -0.294412    0.111984    0.489584 
+	0.452478   0.206963   -0.411828       0.419035    0.388085    0.249209 
+	0.153067   0.654781    0.0909015     -0.19659     0.382659   -0.174877 
 
-julia> r.niters
-6
+	julia> r.niters
+	6
 
-julia> using MatrixDepot
-
-julia> B = matrixdepot("hilb", 6) # try Hilbert matrix
-6x6 Array{Float64,2}:
- 1.0       0.5       0.333333  0.25      0.2       0.166667 
- 0.5       0.333333  0.25      0.2       0.166667  0.142857 
- 0.333333  0.25      0.2       0.166667  0.142857  0.125    
- 0.25      0.2       0.166667  0.142857  0.125     0.111111 
- 0.2       0.166667  0.142857  0.125     0.111111  0.1      
- 0.166667  0.142857  0.125     0.111111  0.1       0.0909091
-
-julia> r = polarfact(B, alg = :halley, verbose=true);
-Iter.    Rel. err.        Obj.         
-    1     4.980074e-01     1.648164e+00
-    2     4.202594e-01     1.676818e+00
-    3     3.111776e-01     1.642458e+00
-    4     5.572934e-01     1.607827e+00
-    5     1.490292e-01     1.585184e+00
-    6     2.150641e-01     1.518917e+00
-    7     3.984436e-01     1.466951e+00
-    8     1.123055e-01     1.452383e+00
-    9     1.494373e-01     1.423552e+00
-   10     3.788419e-01     1.256390e+00
-   11     3.466910e-01     1.278821e+00
-   12     3.509951e-02     1.281831e+00
-   13     1.071601e-01     1.248502e+00
-   14     2.977220e-01     9.945915e-01
-   15     4.693540e-01     2.107683e-01
-   16     1.063725e-01     4.599108e-04
-   17     2.299602e-04     3.678240e-12
-   18     1.839120e-12     2.220446e-16
-
-julia> r.niters
-18
-
-julia> r = polarfact(B, alg = :newton, verbose=true);
-Iter.    Rel. err.        Obj.         
-    1     1.236974e+03     6.297632e+06
-    2     9.907912e-01     8.240846e+02
-    3     9.407495e-01     4.673527e+00
-    4     5.931747e-01     7.838535e-02
-    5     3.697098e-02     3.702364e-04
-    6     1.850680e-04     7.358231e-09
-    7     3.679115e-09     7.669935e-18
-
-julia> r.niters
-7
+	julia> r = polarfact(A, alg = :qdwh, verbose = true);
+	Iter.    Rel. err.        Obj.         
+	1     2.337305e-01     2.940272e+01
+    2     5.454641e-01     5.108731e+00
+    3     3.655509e-01     3.338175e-01
+    4     4.833229e-02     1.140381e-03
+    5     1.788780e-04     6.675496e-11
+    6     1.047445e-11     2.144118e-15
 ```
+
 ## Acknowledgements
 
 The design of the package is inspired by [NMF.jl](https://github.com/JuliaStats/NMF.jl).
