@@ -2,13 +2,13 @@
 
 # the result type
 
-immutable Result
-    U::Matrix{Float64}
-    H::Matrix{Float64}
+immutable Result{T}
+    U::Matrix{T}
+    H::Matrix{T}
     niters::Union(Int, Nothing)
     converged::Union(Bool, Nothing)
     
-    function Result(U::Matrix{Float64}, H::Matrix{Float64}, 
+    function Result{T}(U::Matrix{T}, H::Matrix{T}, 
                     niter::Union(Int,Nothing)=nothing, 
                     converged::Union(Bool, Nothing)=nothing)
         size(U, 2) == size(H, 1) || 
@@ -21,20 +21,20 @@ end
 
 # the objective type
 
-immutable Objective
-    absolute::Float64  # absolute error
-    relative::Float64  # relative error
+immutable Objective{T}
+    absolute::T  # absolute error
+    relative::T  # relative error
 
-    function Objective(absolute::Real, relative::Real)
+    function Objective{T}(absolute::Real, relative::Real)
         absolute >= 0 || error("absolute must be non-negative.")
         relative >= 0 || error("relative must be non-negative.")
 
-        new(float64(absolute), float64(relative))
+        new(absolute, relative)
     end
 end
 
 
-function evaluate_objv(preU::Matrix{Float64}, U::Matrix{Float64})
+function evaluate_objv{T}(preU::Matrix{T}, U::Matrix{T})
     rel = norm(preU - U, Inf) / norm(preU, Inf)
     abs = norm(I - U'*U, Inf)
     return Objective(rel, abs)
@@ -47,15 +47,15 @@ abstract PolarAlg
 
 # common algorithm skeleton for iterative updating methods
 
-function common_iter!(updater::PolarUpdater,
-                      X::Matrix{Float64}, 
-                      U::Matrix{Float64}, 
-                      H::Matrix{Float64},
-                      maxiter::Int,
-                      verbose::Bool,
-                      tol::Float64)
+function common_iter!{T}(updater::PolarUpdater,
+                         X::Matrix{T}, 
+                         U::Matrix{T}, 
+                         H::Matrix{T},
+                         maxiter::Int,
+                         verbose::Bool,
+                         tol::T)
     
-    preU = Array(Float64, size(X))
+    preU = Array(T, size(X))
     copy!(U, X)
     converged = false
     t = 0
@@ -89,15 +89,15 @@ function common_iter!(updater::PolarUpdater,
 end
 
 # Scaling iterative algorithm
-function common_iter_scal!(updater::PolarUpdater,
-                            X::Matrix{Float64}, 
-                            U::Matrix{Float64}, 
-                            H::Matrix{Float64},
-                            maxiter::Int,
-                            verbose::Bool,
-                            tol::Float64)
+function common_iter_scal!{T}(updater::PolarUpdater,
+                              X::Matrix{T}, 
+                              U::Matrix{T}, 
+                              H::Matrix{T},
+                              maxiter::Int,
+                              verbose::Bool,
+                              tol::T)
     
-    preU = Array(Float64, size(X))
+    preU = Array(T, size(X))
     copy!(U, X)
     converged = false
     t = 0
@@ -139,17 +139,17 @@ end
 
 
 # Hybrid iteration algorithm 
-function common_iter_hybr!(updater1::PolarUpdater,
-                           updater2::PolarUpdater,
-                           X::Matrix{Float64}, 
-                           U::Matrix{Float64}, 
-                           H::Matrix{Float64},
-                           maxiter::Int,
-                           verbose::Bool,
-                           tol::Float64,
-                           theta::Float64) # theta is the switch parameter
+function common_iter_hybr!{T}(updater1::PolarUpdater,
+                              updater2::PolarUpdater,
+                              X::Matrix{T}, 
+                              U::Matrix{T}, 
+                              H::Matrix{T},
+                              maxiter::Int,
+                              verbose::Bool,
+                              tol::T,
+                              theta::T) # theta is the switch parameter
 
-    preU = Array(Float64, size(X))
+    preU = Array(T, size(X))
     copy!(U, X)
     converged = false
     switched = false

@@ -7,25 +7,25 @@
 # Vol. 31, Num 5 (2010) pp. 2700-2720 
 #
 
-type HalleyAlg <: PolarAlg
+type HalleyAlg{T} <: PolarAlg
     maxiter::Int
     verbose::Bool
-    tol::Float64
+    tol::T
     
-    function HalleyAlg(;maxiter::Integer=100,
-                       verbose::Bool=false,
-                       tol::Real=1.0e-6)
+    function HalleyAlg{T}(;maxiter::Integer=100,
+                          verbose::Bool=false,
+                          tol::T = convert(T, 1.0e-6))
         maxiter > 1 || error("maxiter must be greater than 1.")
         tol > 0 || error("tol must be positive.")
         
         new(int(maxiter),
             verbose,
-            float64(tol))
+            tol)
     end
 end
 
-function solve!(alg::HalleyAlg,
-                X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
+function solve!{T}(alg::HalleyAlg,
+                X::Matrix{T}, U::Matrix{T}, H::Matrix{T})
     common_iter!(HalleyUpdater(), X, U, H, alg.maxiter, alg.verbose, alg.tol)
 end
 
@@ -33,7 +33,7 @@ immutable HalleyUpdater <: PolarUpdater end
 
 
 function update_U!(upd::HalleyUpdater, U::Matrix{Float64})   
-    UtU = Array(Float64, size(U))
+    UtU = Array(T, size(U))
     At_mul_B!(UtU, U, U)
     copy!(U, U * (3*I + UtU)* inv(I + 3*UtU))
 end
@@ -51,11 +51,11 @@ end
 #                 norm and condition number estimate, which are currently 
 #                 not available in Julia.
 #
-type QDWHAlg <: PolarAlg
+type QDWHAlg{T} <: PolarAlg
     maxiter::Int
     verbose::Bool
     piv::Bool       # whether to pivot  
-    tol::Float64  
+    tol::T  
     
     function QDWHAlg(;maxiter::Integer=100,
                      verbose::Bool=false,
@@ -67,13 +67,13 @@ type QDWHAlg <: PolarAlg
         new(int(maxiter),
             verbose,
             piv,
-            float64(tol))
+            tol)
     end
 end
 
 
-function solve!(alg::QDWHAlg,
-                X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
+function solve!{T}(alg::QDWHAlg,
+                X::Matrix{T}, U::Matrix{T}, H::Matrix{T})
     # alpha is an estimate of the largest singular value of the
     # original matrix
     n = size(X, 1)
@@ -89,19 +89,19 @@ function solve!(alg::QDWHAlg,
     common_iter!(QDWHUpdater(alg.piv, L), X, U, H, alg.maxiter, alg.verbose, alg.tol)
 end
 
-type QDWHUpdater <: PolarUpdater
+type QDWHUpdater{T} <: PolarUpdater
     piv::Bool   # whether to pivot QR factorization
-    L::Float64  # a lower bound for the smallest singluar value of each update matrix U
+    L::T  # a lower bound for the smallest singluar value of each update matrix U
 end
 
 
-function update_U!(upd::QDWHUpdater, U::Matrix{Float64})   
+function update_U!{T}(upd::QDWHUpdater, U::Matrix{T})   
     piv = upd.piv
     L = upd.L
     m, n = size(U)
-    B = Array(Float64, m+n, n)
-    Q1 = Array(Float64, n, n)
-    Q2 = Array(Float64, n, n)
+    B = Array(T, m+n, n)
+    Q1 = Array(T, n, n)
+    Q2 = Array(T, n, n)
     # Compute paramters L, a, b, c
     L2 = L^2
     dd = try

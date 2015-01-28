@@ -11,10 +11,10 @@ include("svd.jl")        # using the SVD method
 include("halley.jl")     # using Halley's method and the QDWH method
 include("hybrid.jl")     # using hybrid method
 
-function polarfact(A::Matrix{Float64}; 
+function polarfact{T}(A::Matrix{T}; 
                    alg::Symbol=:newton, 
                    maxiter::Integer=:100,
-                   tol::Real=1.0e-6,
+                   tol::T = convert(T, 1.0e-6),
                    verbose::Bool=false)
 
     # choose algorithm 
@@ -36,8 +36,8 @@ function polarfact(A::Matrix{Float64};
               greater or equal to column dimension.")
     end
 
-    U = Array(Float64, size(A))
-    H = Array(Float64, size(A))
+    U = Array(T, size(A))
+    H = Array(T, size(A))
     # solve for polar factors
     solve!(algorithm, A, U, H)
 end
