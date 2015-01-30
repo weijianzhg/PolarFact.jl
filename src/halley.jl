@@ -124,7 +124,7 @@ function update_U!{T}(upd::QDWHUpdater, U::Matrix{T})
     copy!(B, [sqrt(c)*U; eye(n)])
     if piv
         # support nightly 0.4.0 
-        VERSION < v"0.4.0-dev+1827"? F = qrfact(B, pivot = true) : F = qrfact(B, pivot = Val{true})
+        VERSION < v"0.4.0-dev+1827"? F = qrfact(B, pivot = true) : F = qrfact(B, pivot == Val{true})
     else
         F = qrfact(B)
     end
