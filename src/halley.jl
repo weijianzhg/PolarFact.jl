@@ -12,9 +12,9 @@ type HalleyAlg{T} <: PolarAlg
     verbose::Bool
     tol::T
     
-    function HalleyAlg{T}(;maxiter::Integer=100,
-                          verbose::Bool=false,
-                          tol::T = convert(T, 1.0e-6))
+    function HalleyAlg(;maxiter::Integer=100,
+                       verbose::Bool=false,
+                       tol::Real = cbrt(eps(T)))
         maxiter > 1 || error("maxiter must be greater than 1.")
         tol > 0 || error("tol must be positive.")
         
@@ -32,7 +32,7 @@ end
 immutable HalleyUpdater <: PolarUpdater end
 
 
-function update_U!(upd::HalleyUpdater, U::Matrix{Float64})   
+function update_U!{T}(upd::HalleyUpdater, U::Matrix{T})   
     UtU = Array(T, size(U))
     At_mul_B!(UtU, U, U)
     copy!(U, U * (3*I + UtU)* inv(I + 3*UtU))

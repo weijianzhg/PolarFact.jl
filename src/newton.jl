@@ -6,18 +6,18 @@
 # SIAM J. Sci. Statist. Comput. Vol. 7, Num 4 (1986) pp. 1160-1174.
 #
    
-type NewtonAlg <: PolarAlg
+type NewtonAlg{T} <: PolarAlg
     maxiter::Int        # maximum number of iterations.
     scale::Bool         # whether to scale Newton iteration.
     verbose::Bool       # whether to show procedural information
-    tol::Float64        # tolerance for convergence
-    scale_tol::Float64  # tolerance for acceleration scaling 
+    tol::T        # tolerance for convergence
+    scale_tol::T  # tolerance for acceleration scaling 
 
     function NewtonAlg(;maxiter::Integer=100,
                        verbose::Bool=false,
                        scale::Bool=true,
-                       tol::Real=1.0e-6,
-                       scale_tol::Real=1.0e-2)
+                       tol::Real=cbrt(eps(T)),
+                       scale_tol::Real=eps(T)^(1/4))
         maxiter > 1 || error("maxiter must be greater than 1.")
         tol > 0 || error("tol must be positive.")
         scale_tol > 0 || error("scale_tol must be positive.")
@@ -25,26 +25,26 @@ type NewtonAlg <: PolarAlg
         new(int(maxiter),
             scale,
             verbose,
-            float64(tol),
-            float64(scale_tol))
+            tol,
+            scale_tol)
     end
 end
 
 
-function solve!(alg::NewtonAlg, 
-                X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
+function solve!{T}(alg::NewtonAlg{T}, 
+                   X::Matrix{T}, U::Matrix{T}, H::Matrix{T})
     common_iter_scal!(NewtonUpdater(alg.scale, alg.scale_tol), X, U, H, alg.maxiter, alg.verbose, alg.tol)
 end
 
-type NewtonUpdater <: PolarUpdater 
+type NewtonUpdater{T} <: PolarUpdater 
     scale::Bool
-    scale_tol::Float64
+    scale_tol::T
 end
 
-function update_U!(upd::NewtonUpdater, U::Matrix{Float64})
+function update_U!{T}(upd::NewtonUpdater, U::Matrix{T})
     scale = upd.scale
-    Uinv = Array(Float64, size(U))
-    Uinvt = Array(Float64, size(U))
+    Uinv = Array(T, size(U))
+    Uinvt = Array(T, size(U))
     copy!(Uinv, inv(U))
     
     # 1, Inf-norm scaling 
@@ -64,14 +64,14 @@ end
 
 # Newton Schulz algrithm
 
-type NewtonSchulzAlg <: PolarAlg  
+type NewtonSchulzAlg{T} <: PolarAlg  
     maxiter::Int     # maximum number of iterations.
     verbose::Bool    # whether to show procedural information
-    tol::Float64     # convergence tolerance. 
+    tol::T     # convergence tolerance. 
 
     function NewtonSchulzAlg(;maxiter::Integer=100,
                              verbose::Bool=false,
-                             tol::Real=1.0e-6)
+                             tol::Real=cbrt(eps(T)))
         maxiter > 1 || error("maxiter must be greater than 1.")
         tol > 0 || error("tol must be positive.")
 

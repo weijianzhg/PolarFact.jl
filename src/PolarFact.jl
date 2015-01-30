@@ -14,17 +14,17 @@ include("hybrid.jl")     # using hybrid method
 function polarfact{T}(A::Matrix{T}; 
                    alg::Symbol=:newton, 
                    maxiter::Integer=:100,
-                   tol::T = convert(T, 1.0e-6),
+                   tol::Real = cbrt(eps(T)),
                    verbose::Bool=false)
 
     # choose algorithm 
     algorithm = 
-       alg == :newton ? NewtonAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
-       alg == :qdwh ?  QDWHAlg(maxiter=maxiter, tol=tol, verbose=verbose) : 
-       alg == :halley ? HalleyAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
+       alg == :newton ? NewtonAlg{T}(maxiter=maxiter, tol=tol, verbose=verbose) :
+       alg == :qdwh ?  QDWHAlg{T}(maxiter=maxiter, tol=tol, verbose=verbose) : 
+       alg == :halley ? HalleyAlg{T}(maxiter=maxiter, tol=tol, verbose=verbose) :
        alg == :svd ? SVDAlg() :   
-       alg == :schulz ? NewtonSchulzAlg(maxiter=maxiter, tol=tol, verbose=verbose):
-       alg == :hybrid ? NewtonHybridAlg(maxiter=maxiter, tol=tol, verbose=verbose) :
+       alg == :schulz ? NewtonSchulzAlg{T}(maxiter=maxiter, tol=tol, verbose=verbose):
+       alg == :hybrid ? NewtonHybridAlg{T}(maxiter=maxiter, tol=tol, verbose=verbose) :
        error("Invalid algorithm.")
 
     # Initialization: if m > n, do QR factorization 

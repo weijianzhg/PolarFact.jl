@@ -8,7 +8,7 @@ immutable Result{T}
     niters::Union(Int, Nothing)
     converged::Union(Bool, Nothing)
     
-    function Result{T}(U::Matrix{T}, H::Matrix{T}, 
+    function Result(U::Matrix{T}, H::Matrix{T}, 
                     niter::Union(Int,Nothing)=nothing, 
                     converged::Union(Bool, Nothing)=nothing)
         size(U, 2) == size(H, 1) || 
@@ -25,7 +25,7 @@ immutable Objective{T}
     absolute::T  # absolute error
     relative::T  # relative error
 
-    function Objective{T}(absolute::Real, relative::Real)
+    function Objective(absolute::Real, relative::Real)
         absolute >= 0 || error("absolute must be non-negative.")
         relative >= 0 || error("relative must be non-negative.")
 
@@ -37,7 +37,7 @@ end
 function evaluate_objv{T}(preU::Matrix{T}, U::Matrix{T})
     rel = norm(preU - U, Inf) / norm(preU, Inf)
     abs = norm(I - U'*U, Inf)
-    return Objective(rel, abs)
+    return Objective{T}(rel, abs)
 end
 
 
@@ -85,7 +85,7 @@ function common_iter!{T}(updater::PolarUpdater,
     # compute H
     A_mul_B!(H, U', X)
     H = 0.5 * (H + H')
-    return Result(U, H, t, converged)
+    return Result{T}(U, H, t, converged)
 end
 
 # Scaling iterative algorithm
@@ -133,7 +133,7 @@ function common_iter_scal!{T}(updater::PolarUpdater,
     # compute H
     A_mul_B!(H, U', X)
     H = 0.5 * (H + H')
-    return Result(U, H, t, converged)
+    return Result{T}(U, H, t, converged)
 end
 
 
@@ -191,6 +191,6 @@ function common_iter_hybr!{T}(updater1::PolarUpdater,
     # compute H
     A_mul_B!(H, U', X)
     H = 0.5 * (H + H')
-    return Result(U, H, t, converged)
+    return Result{T}(U, H, t, converged)
 
 end
