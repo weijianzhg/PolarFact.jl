@@ -107,7 +107,7 @@ The package provides a high-level function ``polarfact``:
 
 The meaning of the arguments:
 
-- ``A`` : the input matrix of type ``Matrix{Float64}``.
+- ``A`` : the input matrix of type ``Matrix{T}``.
 
 - ``alg``: a symbol that indicates the factorization algorithm (default = ``:newton``).
 
@@ -122,7 +122,7 @@ The meaning of the arguments:
 
 - ``maxiter``: maximum number of iterations (default = ``100``).
 
-- ``tol`` :  tolerance (default = ``1.0e-6``).
+- ``tol`` :  tolerance (default = ``cbrt(eps(T))``).
 
 - ``verbose`` : whether to show procedural information (default = ``false``), where
                ``Iter`` is the number of iterations, ``Rel. err.`` is equal to
@@ -135,9 +135,9 @@ SVD method.
 The output has type ``PolarFact.Result``, which is defined as 
 
 ```
-	immutable Result
-		U::Matrix{Float64}               # unitary factor
-		H::Matrix{Float64}               # Hermitian positive semidefinite factor
+	immutable Result{T}
+		U::Matrix{T}               # unitary factor
+		H::Matrix{T}               # Hermitian positive semidefinite factor
 		niters::Union(Int, Nothing)      # number of iterations or Nothing
 		converged::Union(Bool, Nothing)  # whether the algorithm converges or Nothing
 	end
