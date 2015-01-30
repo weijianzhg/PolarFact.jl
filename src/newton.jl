@@ -51,12 +51,10 @@ function update_U!{T}(upd::NewtonUpdater, U::Matrix{T})
     if scale
         g = (norm(Uinv,1) * norm(Uinv, Inf) / (norm(U,1) * norm(U, Inf)) )^(1/4)
     else
-        g = 1
+        g = one(T)
     end
     transpose!(Uinvt, Uinv)
-    for i = 1:length(U)
-        U[i] = (g * U[i] + Uinvt[i] / g)/2
-    end
+    copy!(U, (g * U + Uinvt /g) / convert(T, 2))
 
 end
 
@@ -77,23 +75,23 @@ type NewtonSchulzAlg{T} <: PolarAlg
 
         new(int(maxiter),
             verbose,
-            float64(tol))
+            tol)
     end
 end
 
-function solve!(alg::NewtonSchulzAlg, 
-                X::Matrix{Float64}, U::Matrix{Float64}, H::Matrix{Float64})
+function solve!{T}(alg::NewtonSchulzAlg, 
+                   X::Matrix{T}, U::Matrix{T}, H::Matrix{T})
     
     # Newton Schulz converge quadratically if norm(X) < sqrt(3)
-    norm(X) < sqrt(3) || throw(ArgumentError("The norm of the input matrix must be smaller than sqrt(3)."))
+    norm(X) < convert(T, sqrt(3)) || throw(ArgumentError("The norm of the input matrix must be smaller than sqrt(3)."))
 
     common_iter!(NewtonSchulzUpdater(), X, U, H, alg.maxiter, alg.verbose, alg.tol)
 end
 
 immutable NewtonSchulzUpdater <: PolarUpdater end
 
-function update_U!(upd::NewtonSchulzUpdater, U::Matrix{Float64})
-    UtU = Array(Float64, size(U))
+function update_U!{T}(upd::NewtonSchulzUpdater, U::Matrix{T})
+    UtU = Array(T, size(U))
     At_mul_B!(UtU, U, U)
     copy!(U, 0.5*U*(3*I - UtU))
 end

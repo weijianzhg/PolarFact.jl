@@ -20,6 +20,6 @@ for i in eigvals(H)
     @test i >= 0.
 end
 
-@test_approx_eq A U*H
+@test_approx_eq_eps A U*H 1e-7
 
 println("Hybrid method passed test...")
