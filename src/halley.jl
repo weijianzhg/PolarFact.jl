@@ -60,7 +60,7 @@ type QDWHAlg{T} <: PolarAlg
     function QDWHAlg(;maxiter::Integer=100,
                      verbose::Bool=false,
                      piv::Bool=true, 
-                     tol::Real=1.0e-6)
+                     tol::Real=cbrt(eps(T)))
         maxiter > 1 || error("maxiter must be greater than 1.")
         tol > 0 || error("tol must be positive.")
         
@@ -76,15 +76,18 @@ function solve!{T}(alg::QDWHAlg,
                 X::Matrix{T}, U::Matrix{T}, H::Matrix{T})
     # alpha is an estimate of the largest singular value of the
     # original matrix
-    n = size(X, 1)
-    alpha = vecnorm(X)   
-    for i in length(X)
-        X[i] /= alpha # form X0
+    X_temp = Array(T, size(X))
+    copy!(X_temp, X)
+
+    n = size(X_temp, 1)
+    alpha = vecnorm(X_temp)   
+    for i in length(X_temp)
+        X_temp[i] /= alpha # form X0
     end
 
     # L is a lower bound for the smallest singular value of X0
-    smin_est = norm(X, 1)/cond(X, 1)
-    L  = smin_est/sqrt(n)
+    smin_est = norm(X_temp, 1)/cond(X_temp, 1)
+    L  = smin_est/convert(T, sqrt(n))
 
     common_iter!(QDWHUpdater(alg.piv, L), X, U, H, alg.maxiter, alg.verbose, alg.tol)
 end
