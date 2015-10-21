@@ -108,7 +108,7 @@ The package provides a high-level function ``polarfact``:
 The meaning of the arguments:
 
 - ``A`` : the input matrix of type ``Matrix{T}``, where ``T`` could be
-          ``Float16``, ``Float32``, ``Float64``. 
+          ``Float16``, ``Float32``, ``Float64``, ``BigFloat``. 
 
 - ``alg``: a symbol that indicates the factorization algorithm (default = ``:newton``).
 
