@@ -1,5 +1,6 @@
 module PolarFact
 
+using Compat
 import Base: transpose!
 
 export polarfact

@@ -5,15 +5,25 @@
 immutable Result{T}
     U::Matrix{T}
     H::Matrix{T}
-    niters::Union(Int, Nothing)
-    converged::Union(Bool, Nothing)
+    niters::Integer
+    converged::Bool
     
     function Result(U::Matrix{T}, H::Matrix{T}, 
-                    niter::Union(Int,Nothing)=nothing, 
-                    converged::Union(Bool, Nothing)=nothing)
+                    niter::Integer, 
+                    converged::Bool)
         size(U, 2) == size(H, 1) || 
                throw(DimensionMismatch("Inner dimension of U and H mismatch."))
         new(U, H, niter, converged)
+    end
+end
+
+immutable SVDResult{T}
+    U::Matrix{T}
+    H::Matrix{T}
+    function SVDResult(U::Matrix{T}, H::Matrix{T})
+        size(U, 2) == size(H, 1) || 
+               throw(DimensionMismatch("Inner dimension of U and H mismatch."))
+        new(U, H)
     end
 end
 
@@ -192,5 +202,4 @@ function common_iter_hybr!{T}(updater1::PolarUpdater,
     A_mul_B!(H, U', X)
     H = 0.5 * (H + H')
     return Result{T}(U, H, t, converged)
-
 end
