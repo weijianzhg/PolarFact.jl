@@ -18,7 +18,7 @@ type HalleyAlg{T} <: PolarAlg
         maxiter > 1 || error("maxiter must be greater than 1.")
         tol > 0 || error("tol must be positive.")
         
-        new(int(maxiter),
+        new(maxiter,
             verbose,
             tol)
     end
@@ -64,7 +64,7 @@ type QDWHAlg{T} <: PolarAlg
         maxiter > 1 || error("maxiter must be greater than 1.")
         tol > 0 || error("tol must be positive.")
         
-        new(int(maxiter),
+        new(maxiter,
             verbose,
             piv,
             tol)

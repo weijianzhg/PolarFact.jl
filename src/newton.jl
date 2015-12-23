@@ -22,7 +22,7 @@ type NewtonAlg{T} <: PolarAlg
         tol > 0 || error("tol must be positive.")
         scale_tol > 0 || error("scale_tol must be positive.")
         
-        new(int(maxiter),
+        new(maxiter,
             scale,
             verbose,
             tol,

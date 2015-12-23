@@ -21,7 +21,7 @@ type NewtonHybridAlg{T} <: PolarAlg
         tol > 0 || error("tol must be positive.")
         theta > 0 || error("theta must be positive.")
         
-        new(int(maxiter), 
+        new(maxiter, 
             verbose,
             tol,
             theta)
