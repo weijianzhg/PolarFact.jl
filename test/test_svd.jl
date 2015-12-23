@@ -1,6 +1,6 @@
 n = rand(1:10)
-
-A = rand(n, n)
+m = n + rand(0:5)
+A = rand(m, n)
 
 r = polarfact(A, alg = :svd);
 

@@ -30,14 +30,16 @@ function polarfact{T}(A::Matrix{T};
     # Initialization: if m > n, do QR factorization 
     m, n = size(A)
     if m > n
-        A = qrfact(A)[:R]
+        if alg in [:newton, :qdwh, :halley, :schulz, :hybrid]
+            m = n
+            A = qrfact(A)[:R]
+        end
     elseif m < n
         error("The row dimension of the input matrix must be 
               greater or equal to column dimension.")
     end
-
-    U = Array(T, size(A))
-    H = Array(T, size(A))
+    U = Array(T, m, n)
+    H = Array(T, n, n)
     # solve for polar factors
     solve!(algorithm, A, U, H)
 end

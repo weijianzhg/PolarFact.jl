@@ -13,8 +13,7 @@ function solve!{T}(alg::SVDAlg,
     A_mul_Bt!(PQt, F[:U], F[:V])
     copy!(U, PQt)
     copy!(H, F[:V] * diagm(F[:S]) * F[:Vt])
-    
     H = 0.5 * (H + H')
-    return SVDResult{T}(U, H)
     
+    return SVDResult{T}(U, H)
 end
